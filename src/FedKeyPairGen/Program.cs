@@ -2,6 +2,7 @@
 using System.Linq;
 using NBitcoin;
 using NBitcoin.DataEncoders;
+using NBitcoin.Networks;
 using Stratis.Sidechains.Networks;
 
 namespace FedKeyPairGen
@@ -40,6 +41,7 @@ namespace FedKeyPairGen
                 }
 
                 Mnemonic mnemonic = new Mnemonic(Wordlist.English, WordCount.Twelve);
+
                 var pubKey = mnemonic.DeriveExtKey().PrivateKey.PubKey;
 
                 Console.WriteLine($"-- Mnemonic --");
@@ -107,6 +109,8 @@ namespace FedKeyPairGen
             // The following creates 2 members and creates 2-of-5 multisig addresses for both StratisTest and ApexTest.
             int pubKeysCount = 5;
             int mComponent = 2;
+            Network stratisMain = NetworkRegistration.GetNetwork("StratisMain");
+
 
             PubKey[] pubKeys = new PubKey[pubKeysCount];
 
@@ -131,7 +135,7 @@ namespace FedKeyPairGen
             Console.WriteLine("Sidechan P2SH: " + sidechainMultisigAddress.ScriptPubKey);
             Console.WriteLine("Sidechain Multisig address: " + sidechainMultisigAddress);
 
-            BitcoinAddress mainchainMultisigAddress = payToMultiSig.Hash.GetAddress(Network.StratisTest);
+            BitcoinAddress mainchainMultisigAddress = payToMultiSig.Hash.GetAddress(stratisMain);
             Console.WriteLine("Mainchain P2SH: " + mainchainMultisigAddress.ScriptPubKey);
             Console.WriteLine("Mainchain Multisig address: " + mainchainMultisigAddress);
         }
